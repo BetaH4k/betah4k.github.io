@@ -1,24 +1,4 @@
 # main links
 main:
-  - title: "Exploit Development"
-    url: /exploit development/
-  - title: "Vulnerability/CVE Analysis"
-    url: /Vulnerability-CVE-Analysis/
-  - title: "MacOS"
-    url: /MacOS/
-  #- title: "Windows"
-    #url: /Windows/
-  #- title: "Shellcoding"
-    #url: /Shellcoding/
-  - title: "Certificates"
-    url: /certificates/
-  - title: "Notes"
-    url: /notes/
-  - title: "IoT Exploitation"
-    url: /IoT-Exploitation/
-  - title: "Defense Evasion"
-    url: /defense-evasion/
-  - title: "General"
-    url: /General/
-  - title: "All Categories"
-    url: /categories/
+  - title: "Código Seguro"
+    url: /codigo-seguro/

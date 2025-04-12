@@ -94,25 +94,16 @@ analytics:
 author:
   name: "Lautaro Casanova"
   avatar: /assets/images/site_data/avatar.jpg # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio: "Brain Storming Stuff (Exploit Development, Reverse Engineering & More)"
+  bio: "AppSec, SSDLC y Offensive Security – desde el análisis de código hasta el pentest en producción."
   # location: "Area 51"
   email:
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-      url: "mailto:contact@zeyadazima.com"
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/AzimaZeyad"
+      url: "mailto:b3t42001@gmail.com"
     - label: "LinkedIn"
       icon: "fab fa-fw fa-linkedin"
-      url: "https://www.linkedin.com/in/zer0verflow/"
-    - label: "GitHub"
-      icon: "fab fa-fw fa-github"
-      url: "https://github.com/Zeyad-Azima"
-    - label: "Buy Me a Coffee"
-      icon: "fas fa-mug-hot"
-      url: "https://www.buymeacoffee.com/zeyadazima"
+      url: "https://www.linkedin.com/in/beta-casanova/"
 
 # Site Footer
 footer:
