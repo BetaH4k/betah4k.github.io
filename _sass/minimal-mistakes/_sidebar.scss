@@ -114,17 +114,16 @@
    Author profile and links
    ========================================================================== */
 
-.author__avatar {
-  display: table-cell;
-  vertical-align: top;
-  width: 36px;
-  height: 36px;
+   .author__avatar img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
 
-  @include breakpoint($large) {
-    display: block;
-    width: auto;
-    height: auto;
-  }
+    @include breakpoint($large) {
+      padding: 5px;
+      border: 1px solid $border-color;
+    }
 
   img {
     max-width: 110px;

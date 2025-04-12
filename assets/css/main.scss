@@ -6,11 +6,3 @@
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
-
-.author__avatar img {
-    width: 100px;         // o ajustá según tu diseño
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    display: block;
-  }
