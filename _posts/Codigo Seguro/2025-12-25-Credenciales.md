@@ -8,7 +8,7 @@ description: "Recomendaciones clave para aplicar buenas prácticas de código se
 categories:
   - Código seguro
 tags:
-  - Código seguro
+  - codigo-seguro
 toc: true
 ---
 
