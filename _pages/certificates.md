@@ -1,7 +1,7 @@
 ---
 layout: archive
-permalink: /certificates/
-title: "Certificates"
+permalink: /codigo-seguro/
+title: "Código seguro"
 author_profile: true
 ---
 
