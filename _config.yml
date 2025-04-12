@@ -15,11 +15,11 @@
 minimal_mistakes_skin: "dark" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
-locale: "en-US"
-title: "Zeyad Azima"
+locale: "es-ES"
+title: "Lautaro Casanova"
 title_separator: "-"
 subtitle: # site tagline that appears below site title in masthead
-name: "Zeyad Azima"
+name: "Lautaro Casanova"
 description: "Playing Around The Core of the 7 Layers to build the 0day Empire."
 url: # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl: / # the subpath of your site, e.g. "/blog"
@@ -92,8 +92,8 @@ analytics:
 
 # Site Author
 author:
-  name: "Zeyad Azima"
-  avatar: /assets/images/site_data/avatar.jpg # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  name: "Lautaro Casanova"
+  avatar: /assets/images/site_data/avatar.png # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio: "Brain Storming Stuff (Exploit Development, Reverse Engineering & More)"
   # location: "Area 51"
   email:
