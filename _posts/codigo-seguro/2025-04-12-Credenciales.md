@@ -1,5 +1,5 @@
 ---
-title: "Código seguro - Credenciales"
+title: "Credenciales"
 classes: wide
 header:
   teaser: /assets/images/clasoxyjk07nb0lo1gg0j8xg4.png
@@ -33,7 +33,329 @@ En esta sección del blog, "Código Seguro", vamos a recorrer una serie de buena
 
 Esta guía no está orientada únicamente a cumplir requisitos normativos, sino a incorporar prácticas de diseño seguro desde el inicio del desarrollo. 
 
-## Define una herramienta de gestión de contraseñas
+# Contraseñas con salt aleatorio
+
+Aplicar un `salt` aleatorio a cada contraseña antes de hashearla es una práctica fundamental para evitar ataques como `rainbow tables` o la correlación de hashes idénticos. El salt es un valor único, generado de forma impredecible, que se agrega a la contraseña antes de aplicar el algoritmo de hash. Esto garantiza que incluso si dos usuarios eligen la misma contraseña, los hashes resultantes sean completamente diferentes.
+
+Un `salt` debe generarse de forma criptográficamente segura y ser distinto para cada usuario o entrada. Además, debe ser almacenado junto con el hash (pero no debe ser reutilizado ni predecible). Sin esta protección, incluso los algoritmos de hash más robustos pierden eficacia frente a ataques automatizados.
+
+❌ Ejemplo de código inseguro
+
+```
+import hashlib
+
+def hash_password(password):
+    # Inseguro: salt estático y predecible
+    salt = "123456"
+    return hashlib.sha256((salt + password).encode()).hexdigest()
+
+hashed = hash_password("password123")
+```
+
+Este enfoque es inseguro porque:
+
+  - Usa un salt fijo y compartido para todas las contraseñas.
+
+  - Permite correlacionar hashes si los atacantes acceden a la base de datos.
+
+  - No aprovecha la protección real que ofrece la aleatoriedad del salt.
+
+✅ Ejemplo de código seguro
+
+```
+import os
+import hashlib
+
+def hash_password(password):
+    # Genera un salt aleatorio de 20 bytes
+    salt = os.urandom(20)
+    hashed = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
+    return salt.hex() + ":" + hashed.hex()
+
+hashed = hash_password("password123")
+```
+
+Este enfoque mejora significativamente la seguridad porque:
+
+  - Usa un salt único y aleatorio para cada contraseña.
+
+  - El salt se almacena junto al hash (por ejemplo, separado por :).
+
+  - Aplica PBKDF2 con múltiples iteraciones, agregando resistencia a ataques de fuerza bruta.
+
+💡 Recomendación práctica
+
+Siempre generá un salt aleatorio por cada contraseña y almacenalo junto al hash resultante. Evitá reusar valores fijos o derivados del usuario (como el email o ID). Para sistemas modernos, preferí funciones como `bcrypt`, `scrypt` o `Argon2`, que ya incorporan salt y están diseñadas para ser lentas y seguras ante ataques automatizados. Recordá que el objetivo no es solo encriptar, sino también resistir ataques a gran escala.
+
+# Almacenar contraseñas hasheadas
+
+Una contraseña nunca debe ser almacenada en texto plano. En su lugar, debe ser transformada mediante un algoritmo de hash criptográfico que produzca un valor irreversible y único para cada entrada. A diferencia del cifrado, el hash no se puede “desencriptar”: es unidireccional, lo cual lo convierte en la opción adecuada para verificar contraseñas sin necesidad de conocerlas.
+
+No todos los algoritmos de hash son adecuados. Funciones como `MD5` o `SHA-1` ya no son seguras, ya que existen colisiones conocidas y hardware capaz de realizar millones de cálculos por segundo. Para almacenar contraseñas de forma segura, se deben utilizar algoritmos diseñados específicamente para ese propósito, como `bcrypt`, `scrypt` o `Argon2`.
+
+❌ Ejemplo de código inseguro
+
+```
+import hashlib
+
+def store_password(password):
+    # Inseguro: uso de SHA-1 sin salt
+    return hashlib.sha1(password.encode()).hexdigest()
+
+hashed = store_password("SuperSecret2024!")
+```
+Este enfoque es inseguro porque:
+
+  - SHA-1 es un algoritmo vulnerable a colisiones.
+
+  - No utiliza salt, lo que permite correlacionar hashes entre usuarios.
+
+  - Es demasiado rápido, lo que facilita ataques por fuerza bruta o diccionario.
+
+✅ Ejemplo de código seguro
+
+```
+import bcrypt
+
+def store_password(password):
+    # Seguro: hash usando bcrypt con salt incorporado
+    hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+    return hashed.decode()
+
+hashed = store_password("SuperSecret2024!")
+```
+
+Este enfoque es mucho más seguro porque:
+
+  - Usa bcrypt, un algoritmo específicamente diseñado para almacenar contraseñas.
+
+  - El salt es generado automáticamente e incluido en el hash final.
+
+  - La función es lo suficientemente lenta para dificultar ataques masivos.
+
+💡 Recomendación práctica
+
+Usá funciones de hash pensadas para contraseñas, como `bcrypt`, `scrypt` o `Argon2`. Estas implementaciones ya incorporan mecanismos de salting, múltiples rondas de hashing y están diseñadas para ser costosas computacionalmente. Nunca almacenes contraseñas en texto plano ni uses funciones criptográficas generales como `SHA-256` sin protección adicional. La elección del algoritmo es crítica para resistir ataques modernos, incluso si la base de datos es comprometida.
+
+# Contraseñas con al menos 20 caracteres
+
+Una de las formas más simples y efectivas de mejorar la seguridad de una contraseña es aumentar su longitud. Mientras que muchos sistemas todavía permiten contraseñas de 8 u 11 caracteres, hoy se considera que una contraseña robusta debería tener al menos 20 caracteres, especialmente si se genera aleatoriamente.
+
+La longitud es un factor crítico en la resistencia frente a ataques por fuerza bruta. Una contraseña corta puede ser adivinada rápidamente por herramientas automatizadas, incluso si contiene símbolos o mayúsculas. En cambio, una contraseña larga incrementa exponencialmente el espacio de búsqueda, haciéndola mucho más difícil de romper.
+
+❌ Ejemplo de código inseguro
+
+```
+# Inseguro: validación muy laxa
+def is_valid_password(password):
+    return len(password) >= 8
+
+print(is_valid_password("Admin123"))  # débil
+```
+Este enfoque es riesgoso porque:
+
+  - Acepta contraseñas muy cortas.
+
+  - Depende únicamente de complejidad superficial (mayúsculas, números).
+
+  - No resiste ataques por diccionario o fuerza bruta prolongada.
+
+✅ Ejemplo de código seguro
+
+```
+# Inseguro: validación muy laxa
+# Seguro: exige al menos 20 caracteres
+def is_valid_password(password):
+    return len(password) >= 20
+
+print(is_valid_password("5kG9#rZqA7mLp&cV2xEw"))  # Fuerte
+```
+
+Este enfoque mejora la seguridad porque:
+
+  - Aumenta significativamente el esfuerzo necesario para forzar la contraseña.
+
+  - Incentiva el uso de contraseñas generadas por herramientas, no recordadas manualmente.
+
+  - Permite usar frases de paso o secuencias complejas sin depender únicamente de caracteres especiales.
+
+💡 Recomendación práctica
+
+Requiere contraseñas de al menos 20 caracteres en sistemas críticos o donde se utilicen claves maestras. Si usás generadores automáticos o gestores de contraseñas, asegurate de configurar una longitud mínima adecuada. En este caso, más es mejor.
+
+# Validar contraseñas previamente utilizadas
+
+Permitir que un usuario reutilice contraseñas anteriores debilita significativamente la seguridad del sistema. Esta práctica anula los beneficios del cambio de contraseña, especialmente si las anteriores ya fueron comprometidas o expuestas en bases de datos filtradas.
+
+La validación de contraseñas previamente utilizadas consiste en almacenar un historial limitado de hashes antiguos y compararlos con la nueva contraseña antes de aceptarla. Esto no solo obliga a que cada nueva clave sea realmente nueva, sino que también fomenta el uso de contraseñas más seguras y menos predecibles.
+
+❌ Ejemplo de código inseguro
+
+```
+import bcrypt
+
+# Simula la última contraseña usada (hash de "OldPassword123")
+previous_hash = bcrypt.hashpw(b"OldPassword123", bcrypt.gensalt())
+
+def is_password_new(password):
+    # Inseguro: solo compara con la contraseña actual (hash no persistido)
+    return not bcrypt.checkpw(password.encode(), previous_hash)
+
+print(is_password_new("OldPassword123"))  # False
+```
+
+Este enfoque es inseguro porque:
+
+  - Solo almacena un único hash anterior, sin mantener historial real.
+
+  - No permite controlar cuántas versiones atrás puede retroceder un usuario.
+
+  - Se rompe si el sistema no guarda correctamente los hashes antiguos.
+
+✅ Ejemplo de código seguro
+
+```
+import bcrypt
+
+# Simulación de hashes de contraseñas anteriores
+previous_passwords = [
+    bcrypt.hashpw(b"OldPassword1", bcrypt.gensalt()),
+    bcrypt.hashpw(b"OldPassword2", bcrypt.gensalt()),
+    bcrypt.hashpw(b"OldPassword3", bcrypt.gensalt())
+]
+
+def is_password_reused(new_password, old_hashes):
+    for old_hash in old_hashes:
+        if bcrypt.checkpw(new_password.encode(), old_hash):
+            return True
+    return False
+
+print(is_password_reused("OldPassword2", previous_passwords))  # True
+```
+Este enfoque es seguro porque:
+
+    Compara la nueva contraseña con un historial completo de hashes anteriores.
+
+    Evita la reutilización de contraseñas ya conocidas o previamente filtradas.
+
+    Permite extender o limitar la cantidad de contraseñas recordadas según política.
+
+💡 Recomendación práctica
+
+Implementá una política de historial de contraseñas que evite la reutilización de las últimas 5 a 10 claves. Guardá únicamente los hashes, no las contraseñas originales, y usá algoritmos fuertes como bcrypt o Argon2. Complementá esta medida validando también contra listas de contraseñas comprometidas públicas (por ejemplo, con la API de Have I Been Pwned). Esta práctica ayuda a romper con patrones predecibles y a mantener el sistema más robusto frente a ataques dirigidos.
+
+# Prevenir el uso de contraseñas comprometidas
+
+Una contraseña puede parecer segura por su longitud o complejidad, pero si ya ha sido filtrada en una brecha de datos, su uso representa un riesgo inmediato. La reutilización de contraseñas expuestas es una de las principales causas de accesos no autorizados, especialmente en ataques automatizados como el `credential stuffing`.
+
+Prevenir el uso de contraseñas comprometidas implica verificar si una nueva contraseña ya ha aparecido en bases de datos filtradas. Para ello, existen servicios públicos y APIs como `Have I Been Pwned` que permiten realizar búsquedas anónimas de hashes para validar si una contraseña ha sido comprometida previamente.
+
+❌ Ejemplo de código inseguro
+
+```
+# Inseguro: no realiza ninguna validación contra contraseñas filtradas
+def is_valid_password(password):
+    return len(password) >= 12 and any(c.isdigit() for c in password)
+
+print(is_valid_password("Welcome123"))  # True, pero muy común y probablemente filtrada
+```
+
+Este enfoque es insuficiente porque:
+
+  - Se basa únicamente en reglas de complejidad.
+
+  - No detecta contraseñas ya expuestas en filtraciones masivas.
+
+  - Permite el uso de claves ampliamente conocidas por atacantes.
+
+✅ Ejemplo de código seguro
+
+```
+import hashlib
+import requests
+
+def is_password_pwned(password):
+    sha1 = hashlib.sha1(password.encode()).hexdigest().upper()
+    prefix, suffix = sha1[:5], sha1[5:]
+    url = f"https://api.pwnedpasswords.com/range/{prefix}"
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        raise RuntimeError("Error al consultar Have I Been Pwned")
+
+    return any(line.split(':')[0] == suffix for line in response.text.splitlines())
+
+print(is_password_pwned("Password123"))  # True si fue filtrada
+```
+Este enfoque es seguro porque:
+
+  - Usa el método k-Anonymity para consultar solo un fragmento del hash (no expone la contraseña completa).
+
+  - Valida si la contraseña fue encontrada en millones de registros filtrados.
+
+  - Bloquea el uso de claves previamente comprometidas, aunque parezcan fuertes.
+
+💡 Recomendación práctica
+
+Integrá una validación contra listas de contraseñas filtradas al momento de registrar o cambiar una clave. Utilizá APIs confiables como Have I Been Pwned, que ofrecen consultas eficientes sin comprometer la privacidad del usuario. Esta medida es especialmente importante para accesos privilegiados o claves maestras. Recordá: una contraseña segura no es solo la que parece fuerte, sino la que nunca ha sido expuesta.
+
+# Limitar la vida útil de las contraseñas
+
+Toda contraseña, por más robusta que sea, se vuelve progresivamente vulnerable con el paso del tiempo. Cuanto más tiempo permanece en uso, más oportunidades existen para que sea interceptada, reutilizada en otros servicios, filtrada en una brecha de datos o comprometida por malware. Por eso, establecer una vida útil máxima para las contraseñas es una práctica esencial en sistemas que manejan información sensible.
+
+Limitar la duración de una contraseña obliga al usuario a renovarla periódicamente, lo cual reduce el riesgo de exposición prolongada. Sin embargo, esta política debe implementarse con criterios razonables y combinada con otras medidas (como evitar la reutilización o verificar contraseñas comprometidas) para no generar fricción innecesaria ni incentivar malas prácticas, como el uso de patrones predecibles.
+
+❌ Ejemplo de código inseguro
+
+```
+# Inseguro: sin control de expiración
+user = {
+    "password_hash": "abc123...",
+    "password_last_changed": None
+}
+
+def is_password_expired(user):
+    return False  # Nunca expira
+```
+
+Este enfoque es inseguro porque:
+
+  - Permite que una contraseña se mantenga activa indefinidamente.
+
+  - No detecta cuándo fue cambiada por última vez.
+
+  - Impide aplicar políticas de rotación periódica.
+
+✅ Ejemplo de código seguro
+
+```
+from datetime import datetime, timedelta
+
+user = {
+    "password_hash": "abc123...",
+    "password_last_changed": datetime(2024, 12, 1)
+}
+
+def is_password_expired(user, max_age_days=90):
+    return datetime.now() > user["password_last_changed"] + timedelta(days=max_age_days)
+
+print(is_password_expired(user))  # True si pasaron más de 90 días
+```
+
+Este enfoque es más seguro porque:
+
+  - Define una vida útil máxima para cada contraseña.
+
+  - Permite forzar el cambio periódico en función de la fecha de último cambio.
+
+  - Se adapta fácilmente a diferentes políticas según tipo de cuenta (admin, usuario común, etc.).
+
+💡 Recomendación práctica
+
+Establecé un período de expiración razonable para las contraseñas, por ejemplo, cada 90 o 180 días, dependiendo del nivel de criticidad del sistema. Evitá aplicar esta política en aislamiento: combiná el vencimiento con controles que impidan la reutilización, que validen si la nueva contraseña fue comprometida y que ofrezcan mecanismos de recuperación robustos. Recordá que el objetivo no es forzar cambios frecuentes, sino reducir el tiempo de exposición de una contraseña en caso de que sea vulnerada.
+
+# Test
+# Define una herramienta de gestión de contraseñas
 
 Las `credenciales` de acceso, especialmente aquellas asociadas a usuarios con permisos elevados, deben ser administradas a través de herramientas especializadas. Usar métodos manuales o almacenar contraseñas en archivos de configuración, planillas o código fuente representa una amenaza directa a la seguridad de cualquier sistema.
 
@@ -69,6 +391,5 @@ Con este enfoque:
   - Se puede restringir el acceso únicamente a los servicios o usuarios autorizados.
 
 💡 Recomendación práctica
-
 
 Seleccioná una herramienta que se ajuste al tamaño y complejidad de tu entorno. Para proyectos pequeños, una opción local como `KeePassXC` puede ser suficiente. En entornos corporativos o escalables, herramientas como `Vault` o `1Password Business` ofrecen mayores garantías de seguridad y trazabilidad. Lo importante es no delegar la gestión de credenciales a soluciones improvisadas o manuales.
