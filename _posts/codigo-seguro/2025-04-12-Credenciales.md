@@ -64,7 +64,7 @@ Este enfoque es inseguro porque:
 
 ✅ Ejemplo de código seguro
 
-```
+```python
 import os
 import hashlib
 
@@ -97,7 +97,7 @@ No todos los algoritmos de hash son adecuados. Funciones como `MD5` o `SHA-1` ya
 
 ❌ Ejemplo de código inseguro
 
-```
+```python
 import hashlib
 
 def store_password(password):
@@ -116,7 +116,7 @@ Este enfoque es inseguro porque:
 
 ✅ Ejemplo de código seguro
 
-```
+```python
 import bcrypt
 
 def store_password(password):
@@ -147,7 +147,7 @@ La longitud es un factor crítico en la resistencia frente a ataques por fuerza 
 
 ❌ Ejemplo de código inseguro
 
-```
+```python
 # Inseguro: validación muy laxa
 def is_valid_password(password):
     return len(password) >= 8
@@ -164,7 +164,7 @@ Este enfoque es riesgoso porque:
 
 ✅ Ejemplo de código seguro
 
-```
+```python
 # Inseguro: validación muy laxa
 # Seguro: exige al menos 20 caracteres
 def is_valid_password(password):
@@ -193,7 +193,7 @@ La validación de contraseñas previamente utilizadas consiste en almacenar un h
 
 ❌ Ejemplo de código inseguro
 
-```
+```python
 import bcrypt
 
 # Simula la última contraseña usada (hash de "OldPassword123")
@@ -216,7 +216,7 @@ Este enfoque es inseguro porque:
 
 ✅ Ejemplo de código seguro
 
-```
+```python
 import bcrypt
 
 # Simulación de hashes de contraseñas anteriores
@@ -254,7 +254,7 @@ Prevenir el uso de contraseñas comprometidas implica verificar si una nueva con
 
 ❌ Ejemplo de código inseguro
 
-```
+```python
 # Inseguro: no realiza ninguna validación contra contraseñas filtradas
 def is_valid_password(password):
     return len(password) >= 12 and any(c.isdigit() for c in password)
@@ -272,7 +272,7 @@ Este enfoque es insuficiente porque:
 
 ✅ Ejemplo de código seguro
 
-```
+```python
 import hashlib
 import requests
 
@@ -309,7 +309,7 @@ Limitar la duración de una contraseña obliga al usuario a renovarla periódica
 
 ❌ Ejemplo de código inseguro
 
-```
+```python
 # Inseguro: sin control de expiración
 user = {
     "password_hash": "abc123...",
@@ -330,7 +330,7 @@ Este enfoque es inseguro porque:
 
 ✅ Ejemplo de código seguro
 
-```
+```python
 from datetime import datetime, timedelta
 
 user = {
@@ -364,7 +364,7 @@ Un buen sistema de regeneración debe verificar adecuadamente la identidad del u
 
 ❌ Ejemplo de código inseguro
 
-```
+```python
 def generate_reset_link(user_email):
     # Inseguro: link de restablecimiento sin token, solo con el email
     return f"https://midominio.com/reset?email={user_email}"
@@ -379,7 +379,7 @@ Este enfoque es altamente inseguro porque:
 
 ✅ Ejemplo de código seguro
 
-```
+```python
 import uuid
 from datetime import datetime, timedelta
 
@@ -417,14 +417,14 @@ Las herramientas de gestión de contraseñas como `HashiCorp Vault`, `Bitwarden`
 
 ❌ Ejemplo de código inseguro
 
-```
+```python
 # Inseguro: contraseña escrita en texto plano dentro del código
 SMTP_PASSWORD = "SuperSecret2024!"
 ```
 
 ✅ Ejemplo de código seguro
 
-```
+```python
 import hvac  # Cliente de HashiCorp Vault en Python
 
 client = hvac.Client(url='https://vault.miempresa.com', token='s.abc123token')
@@ -456,7 +456,7 @@ Este mecanismo, conocido como reauthentication, obliga al usuario a ingresar nue
 
 ❌ Ejemplo de código inseguro
 
-```
+```python
 # Inseguro: permite cambiar la contraseña sin validar la contraseña actual
 def change_password(user_id, new_password):
     # Falta validación del usuario autenticado
@@ -473,7 +473,7 @@ Este enfoque es riesgoso porque:
 
 ✅ Ejemplo de código seguro
 
-```
+```python
 # Simula un paso de reautenticación antes de permitir el cambio
 def reauthenticate(user_id, current_password):
     stored_hash = get_password_hash_from_db(user_id)
