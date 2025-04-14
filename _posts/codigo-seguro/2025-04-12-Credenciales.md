@@ -2,7 +2,7 @@
 title: "Credenciales"
 classes: wide
 header:
-  teaser: /assets\images\site_data\c-credenciales.png
+  teaser: /assets/images/site_data/c-credenciales.png
 ribbon: teal
 description: "Recomendaciones y requerimientos claves para aplicar buenas prácticas de código seguro en la gestión e implementación de credenciales"
 categories:
