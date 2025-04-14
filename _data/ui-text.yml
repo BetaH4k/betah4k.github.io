@@ -72,7 +72,7 @@ es: &DEFAULT_ES
   breadcrumb_separator       : "/"
   menu_label                 : "Alternar menú"
   search_label               : "Alternar búsqueda"
-  toc_label                  : "En esta página"
+  toc_label                  : "Contenido"
   ext_link_label             : "Enlace directo"
   less_than                  : "menos de"
   minute_read                : "minuto(s) de lectura"
