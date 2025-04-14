@@ -6,7 +6,7 @@ header:
 ribbon: teal
 description: "Recomendaciones y requerimientos claves para aplicar buenas prácticas de código seguro en la gestión e implementación de credenciales"
 categories:
-  - codigo-seguro
+  - Codigo Seguro
 tags:
   - credenciales
 toc: true
@@ -53,9 +53,7 @@ hashed = hash_password("password123")
 Este enfoque es inseguro porque:
 
   - Usa un salt fijo y compartido para todas las contraseñas.
-
   - Permite correlacionar hashes si los atacantes acceden a la base de datos.
-
   - No aprovecha la protección real que ofrece la aleatoriedad del salt.
 
 ✅ Ejemplo de código seguro
@@ -76,9 +74,7 @@ hashed = hash_password("password123")
 Este enfoque mejora significativamente la seguridad porque:
 
   - Usa un salt único y aleatorio para cada contraseña.
-
   - El salt se almacena junto al hash (por ejemplo, separado por :).
-
   - Aplica PBKDF2 con múltiples iteraciones, agregando resistencia a ataques de fuerza bruta.
 
 💡 Recomendación práctica
@@ -105,9 +101,7 @@ hashed = store_password("SuperSecret2024!")
 Este enfoque es inseguro porque:
 
   - SHA-1 es un algoritmo vulnerable a colisiones.
-
   - No utiliza salt, lo que permite correlacionar hashes entre usuarios.
-
   - Es demasiado rápido, lo que facilita ataques por fuerza bruta o diccionario.
 
 ✅ Ejemplo de código seguro
@@ -126,9 +120,7 @@ hashed = store_password("SuperSecret2024!")
 Este enfoque es mucho más seguro porque:
 
   - Usa bcrypt, un algoritmo específicamente diseñado para almacenar contraseñas.
-
   - El salt es generado automáticamente e incluido en el hash final.
-
   - La función es lo suficientemente lenta para dificultar ataques masivos.
 
 💡 Recomendación práctica
@@ -153,9 +145,7 @@ print(is_valid_password("Admin123"))  # débil
 Este enfoque es riesgoso porque:
 
   - Acepta contraseñas muy cortas.
-
   - Depende únicamente de complejidad superficial (mayúsculas, números).
-
   - No resiste ataques por diccionario o fuerza bruta prolongada.
 
 ✅ Ejemplo de código seguro
@@ -172,9 +162,7 @@ print(is_valid_password("5kG9#rZqA7mLp&cV2xEw"))  # Fuerte
 Este enfoque mejora la seguridad porque:
 
   - Aumenta significativamente el esfuerzo necesario para forzar la contraseña.
-
   - Incentiva el uso de contraseñas generadas por herramientas, no recordadas manualmente.
-
   - Permite usar frases de paso o secuencias complejas sin depender únicamente de caracteres especiales.
 
 💡 Recomendación práctica
@@ -205,9 +193,7 @@ print(is_password_new("OldPassword123"))  # False
 Este enfoque es inseguro porque:
 
   - Solo almacena un único hash anterior, sin mantener historial real.
-
   - No permite controlar cuántas versiones atrás puede retroceder un usuario.
-
   - Se rompe si el sistema no guarda correctamente los hashes antiguos.
 
 ✅ Ejemplo de código seguro
@@ -233,9 +219,7 @@ print(is_password_reused("OldPassword2", previous_passwords))  # True
 Este enfoque es seguro porque:
 
   - Compara la nueva contraseña con un historial completo de hashes anteriores.
-
   - Evita la reutilización de contraseñas ya conocidas o previamente filtradas.
-
   - Permite extender o limitar la cantidad de contraseñas recordadas según política.
 
 💡 Recomendación práctica
@@ -261,9 +245,7 @@ print(is_valid_password("Welcome123"))  # True, pero muy común y probablemente 
 Este enfoque es insuficiente porque:
 
   - Se basa únicamente en reglas de complejidad.
-
   - No detecta contraseñas ya expuestas en filtraciones masivas.
-
   - Permite el uso de claves ampliamente conocidas por atacantes.
 
 ✅ Ejemplo de código seguro
@@ -288,9 +270,7 @@ print(is_password_pwned("Password123"))  # True si fue filtrada
 Este enfoque es seguro porque:
 
   - Usa el método k-Anonymity para consultar solo un fragmento del hash (no expone la contraseña completa).
-
   - Valida si la contraseña fue encontrada en millones de registros filtrados.
-
   - Bloquea el uso de claves previamente comprometidas, aunque parezcan fuertes.
 
 💡 Recomendación práctica
@@ -319,9 +299,7 @@ def is_password_expired(user):
 Este enfoque es inseguro porque:
 
   - Permite que una contraseña se mantenga activa indefinidamente.
-
   - No detecta cuándo fue cambiada por última vez.
-
   - Impide aplicar políticas de rotación periódica.
 
 ✅ Ejemplo de código seguro
@@ -343,9 +321,7 @@ print(is_password_expired(user))  # True si pasaron más de 90 días
 Este enfoque es más seguro porque:
 
   - Define una vida útil máxima para cada contraseña.
-
   - Permite forzar el cambio periódico en función de la fecha de último cambio.
-
   - Se adapta fácilmente a diferentes políticas según tipo de cuenta (admin, usuario común, etc.).
 
 💡 Recomendación práctica
@@ -368,9 +344,7 @@ def generate_reset_link(user_email):
 Este enfoque es altamente inseguro porque:
 
   - No incluye ningún identificador único o secreto.
-
   - Permite que cualquier persona que conozca el correo genere un enlace válido.
-
   - Facilita ataques automatizados y suplantación de identidad.
 
 ✅ Ejemplo de código seguro
@@ -396,9 +370,7 @@ print(generate_reset_token("user_123"))
 Este enfoque es seguro porque:
 
   - Genera un token aleatorio, único e impredecible.
-
   - Establece una expiración estricta del enlace (por ejemplo, 15 minutos).
-
   - El token es de un solo uso y se valida antes de permitir la regeneración.
 
 💡 Recomendación práctica
@@ -433,11 +405,8 @@ smtp_password = secret['data']['data']['password']
 Con este enfoque:
 
   - La contraseña no está presente en el código.
-
   - Se puede revocar o rotar sin modificar la aplicación.
-
   - Vault registra cada acceso, incluso diferenciando por usuario o servicio.
-
   - Se puede restringir el acceso únicamente a los servicios o usuarios autorizados.
 
 💡 Recomendación práctica
@@ -462,9 +431,7 @@ def change_password(user_id, new_password):
 Este enfoque es riesgoso porque:
 
   - Confía ciegamente en la sesión activa.
-
   - Permite que un atacante con acceso al navegador o a una sesión comprometida realice cambios críticos.
-
   - No verifica si quien realiza la operación es realmente el propietario de la cuenta.
 
 ✅ Ejemplo de código seguro
@@ -484,9 +451,7 @@ def change_password(user_id, current_password, new_password):
 Este enfoque es más seguro porque:
 
   - Solicita la contraseña actual antes de permitir cambios.
-
   - Requiere validación explícita del usuario en operaciones sensibles.
-
   - Puede extenderse fácilmente para incorporar MFA como segundo paso.
 
 💡 Recomendación práctica
