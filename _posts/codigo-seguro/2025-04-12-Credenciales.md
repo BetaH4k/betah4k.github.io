@@ -3,8 +3,8 @@ title: "Credenciales"
 classes: wide
 header:
   teaser: /assets/images/clasoxyjk07nb0lo1gg0j8xg4.png
-ribbon: orange
-description: "Recomendaciones clave para aplicar buenas prácticas de código seguro en la gestión e implementación de credenciales"
+ribbon: teal
+description: "Recomendaciones y requerimientos claves para aplicar buenas prácticas de código seguro en la gestión e implementación de credenciales"
 categories:
   - Código seguro
 tags:
@@ -13,7 +13,7 @@ toc: true
 ---
 
 
-# Introduction
+# Introducción
 
 El uso adecuado de credenciales es un componente esencial en el desarrollo de software seguro. No se trata solo de elegir contraseñas largas o complejas, sino de aplicar criterios técnicos precisos durante todo su ciclo de vida: generación, almacenamiento, uso, rotación y eliminación.
 
@@ -354,7 +354,59 @@ Este enfoque es más seguro porque:
 
 Establecé un período de expiración razonable para las contraseñas, por ejemplo, cada 90 o 180 días, dependiendo del nivel de criticidad del sistema. Evitá aplicar esta política en aislamiento: combiná el vencimiento con controles que impidan la reutilización, que validen si la nueva contraseña fue comprometida y que ofrezcan mecanismos de recuperación robustos. Recordá que el objetivo no es forzar cambios frecuentes, sino reducir el tiempo de exposición de una contraseña en caso de que sea vulnerada.
 
-# Test
+# Establecer un mecanismo de regeneración de contraseñas 
+
+Toda aplicación que gestione usuarios debe contar con un mecanismo seguro y eficiente para permitir la regeneración de contraseñas, ya sea por olvido, expiración o requerimiento de seguridad (por ejemplo, ante un incidente de seguridad o sospecha de compromiso). Este mecanismo es un punto crítico del sistema y debe diseñarse con especial cuidado, ya que suele ser blanco de ataques dirigidos.
+
+Un buen sistema de regeneración debe verificar adecuadamente la identidad del usuario, generar enlaces temporales seguros (tokens de un solo uso), establecer vencimientos breves, y evitar la exposición de datos sensibles. Además, debe garantizar que el nuevo acceso invalide inmediatamente la contraseña anterior o los tokens activos asociados.
+
+❌ Ejemplo de código inseguro
+
+```
+def generate_reset_link(user_email):
+    # Inseguro: link de restablecimiento sin token, solo con el email
+    return f"https://midominio.com/reset?email={user_email}"
+```
+Este enfoque es altamente inseguro porque:
+
+  - No incluye ningún identificador único o secreto.
+
+  - Permite que cualquier persona que conozca el correo genere un enlace válido.
+
+  - Facilita ataques automatizados y suplantación de identidad.
+
+✅ Ejemplo de código seguro
+
+```
+import uuid
+from datetime import datetime, timedelta
+
+# Almacena el token y su expiración (ejemplo simulado)
+reset_tokens = {}
+
+def generate_reset_token(user_id):
+    token = str(uuid.uuid4())
+    reset_tokens[token] = {
+        "user_id": user_id,
+        "expires_at": datetime.now() + timedelta(minutes=15)
+    }
+    return f"https://midominio.com/reset-password?token={token}"
+
+# Ejemplo de uso
+print(generate_reset_token("user_123"))
+```
+Este enfoque es seguro porque:
+
+  - Genera un token aleatorio, único e impredecible.
+
+  - Establece una expiración estricta del enlace (por ejemplo, 15 minutos).
+
+  - El token es de un solo uso y se valida antes de permitir la regeneración.
+
+💡 Recomendación práctica
+
+Implementá un mecanismo de restablecimiento de contraseñas basado en tokens temporales y de un solo uso, con vencimientos breves y validaciones estrictas. Evitá enviar contraseñas por correo electrónico y asegurate de registrar los intentos de regeneración para detectar abusos. Siempre que se regenere una contraseña, invalidá las sesiones activas y notificá al usuario del cambio.
+
 # Define una herramienta de gestión de contraseñas
 
 Las `credenciales` de acceso, especialmente aquellas asociadas a usuarios con permisos elevados, deben ser administradas a través de herramientas especializadas. Usar métodos manuales o almacenar contraseñas en archivos de configuración, planillas o código fuente representa una amenaza directa a la seguridad de cualquier sistema.
@@ -393,3 +445,85 @@ Con este enfoque:
 💡 Recomendación práctica
 
 Seleccioná una herramienta que se ajuste al tamaño y complejidad de tu entorno. Para proyectos pequeños, una opción local como `KeePassXC` puede ser suficiente. En entornos corporativos o escalables, herramientas como `Vault` o `1Password Business` ofrecen mayores garantías de seguridad y trazabilidad. Lo importante es no delegar la gestión de credenciales a soluciones improvisadas o manuales.
+
+# Forzar reautenticación
+
+La autenticación inicial de un usuario no debería otorgar acceso ilimitado e indefinido a todas las funcionalidades críticas del sistema. En operaciones especialmente sensibles como cambiar una contraseña, modificar una clave API, acceder a información financiera o eliminar cuentas es una buena práctica forzar al usuario a reautenticarse, incluso si su sesión está activa.
+
+Este mecanismo, conocido como reauthentication, obliga al usuario a ingresar nuevamente su contraseña o realizar una validación de segundo factor antes de permitir una acción crítica. De esta forma se reduce el riesgo asociado a sesiones comprometidas, accesos prolongados en dispositivos desatendidos, o ataques internos desde cuentas legítimas pero descuidadas.
+
+❌ Ejemplo de código inseguro
+
+```
+# Inseguro: permite cambiar la contraseña sin validar la contraseña actual
+def change_password(user_id, new_password):
+    # Falta validación del usuario autenticado
+    update_password(user_id, new_password)
+```
+
+Este enfoque es riesgoso porque:
+
+  - Confía ciegamente en la sesión activa.
+
+  - Permite que un atacante con acceso al navegador o a una sesión comprometida realice cambios críticos.
+
+  - No verifica si quien realiza la operación es realmente el propietario de la cuenta.
+
+✅ Ejemplo de código seguro
+
+```
+# Simula un paso de reautenticación antes de permitir el cambio
+def reauthenticate(user_id, current_password):
+    stored_hash = get_password_hash_from_db(user_id)
+    return verify_password(current_password, stored_hash)
+
+def change_password(user_id, current_password, new_password):
+    if not reauthenticate(user_id, current_password):
+        raise Exception("Reautenticación fallida")
+    update_password(user_id, new_password)
+```
+
+Este enfoque es más seguro porque:
+
+  - Solicita la contraseña actual antes de permitir cambios.
+
+  - Requiere validación explícita del usuario en operaciones sensibles.
+
+  - Puede extenderse fácilmente para incorporar MFA como segundo paso.
+
+💡 Recomendación práctica
+
+Identificá claramente las acciones de alto impacto dentro de tu aplicación (por ejemplo, cambiar correo electrónico, credenciales, deshabilitar MFA, eliminar datos sensibles) y exigí reauthenticación inmediata antes de permitirlas. Este mecanismo debe ser claro, rápido, y seguro, sin exponer contraseñas en texto plano ni generar tokens persistentes. Si tu sistema utiliza MFA, considerá forzar también una segunda validación. Recordá que la sesión activa no siempre equivale a consentimiento o control activo del usuario.
+
+# 📚 Referencias técnicas
+
+## 🧪 Fluid Attacks
+
+- [Credential Management: Security Criteria](https://help.fluidattacks.com/portal/en/kb/criteria/requirements/credentials)
+- [Insecure Storage of Credentials](https://help.fluidattacks.com/portal/en/kb/articles/criteria-vulnerabilities-085)
+- [Weak Authentication Mechanisms](https://help.fluidattacks.com/portal/en/kb/articles/criteria-vulnerabilities-363)
+- [Password Policy Misconfigurations](https://help.fluidattacks.com/portal/en/kb/articles/criteria-fixes-cloudformation-363)
+
+## 🧱 CWE (Common Weakness Enumeration)
+
+- [CWE-256: Plaintext Storage of a Password](https://cwe.mitre.org/data/definitions/256.html)
+- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)
+- [CWE-521: Weak Password Requirements](https://cwe.mitre.org/data/definitions/521.html)
+- [CWE-916: Use of Password Hash With Insufficient Computational Effort](https://cwe.mitre.org/data/definitions/916.html)
+- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)
+
+## 🔐 OWASP (Open Worldwide Application Security Project)
+
+- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
+- [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)
+- [OWASP Top 10 - A07:2021 – Identification and Authentication Failures](https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/)
+- [OWASP ASVS – V2: Authentication Verification Requirements](https://github.com/OWASP/ASVS)
+- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)
+
+## 🧩 Sonar (SonarQube / SonarCloud Rules)
+
+- [S2068: Hardcoded credentials (Sonar rule)](https://rules.sonarsource.com/java/RSPEC-2068/)
+- [S5131: Use of Weak Cryptographic Algorithms](https://rules.sonarsource.com/java/RSPEC-5131/)
+- [S1313: Hardcoded IP addresses and sensitive data](https://rules.sonarsource.com/java/RSPEC-1313/)
+- [S6333: Improper Credential Storage](https://rules.sonarsource.com/javascript/RSPEC-6333/)
+- [Security Hotspots – Credentials Management](https://docs.sonarsource.com/sonarqube/latest/user-guide/security-hotspots/)
