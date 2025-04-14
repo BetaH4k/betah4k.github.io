@@ -43,7 +43,7 @@ Un `salt` debe generarse de forma criptográficamente segura y ser distinto para
 
 ❌ Ejemplo de código inseguro
 
-```
+```python
 import hashlib
 
 def hash_password(password):
@@ -236,11 +236,11 @@ print(is_password_reused("OldPassword2", previous_passwords))  # True
 ```
 Este enfoque es seguro porque:
 
-    Compara la nueva contraseña con un historial completo de hashes anteriores.
+  - Compara la nueva contraseña con un historial completo de hashes anteriores.
 
-    Evita la reutilización de contraseñas ya conocidas o previamente filtradas.
+  - Evita la reutilización de contraseñas ya conocidas o previamente filtradas.
 
-    Permite extender o limitar la cantidad de contraseñas recordadas según política.
+  - Permite extender o limitar la cantidad de contraseñas recordadas según política.
 
 💡 Recomendación práctica
 
