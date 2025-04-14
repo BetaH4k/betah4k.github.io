@@ -22,13 +22,9 @@ En este post de la serie "Código Seguro", te comparto un recorrido por concepto
 Algunos de los puntos que abordo incluyen:
 
   - Cómo usar salts aleatorios y algoritmos de hash adecuados.
-
   - Cuál debería ser la longitud mínima de una contraseña y cómo construir una passphrase robusta.
-
   - Por qué es importante evitar la reutilización o el uso de contraseñas previamente filtradas.
-
   - Qué herramientas existen para gestionar credenciales (como Vault o Bitwarden).
-
   - Cuáles son los errores más comunes que conviene evitar.
 
   > ⚠️ Nota: los fragmentos de código fueron generados con ayuda de IA y se presentan solo con fines ilustrativos. No deben usarse directamente en producción sin revisión y adaptación al contexto real de tu proyecto.
