@@ -2,11 +2,11 @@
 title: "Credenciales"
 classes: wide
 header:
-  teaser: /assets/images/clasoxyjk07nb0lo1gg0j8xg4.png
+  teaser: /assets/images/c-credenciales.png
 ribbon: teal
 description: "Recomendaciones y requerimientos claves para aplicar buenas prácticas de código seguro en la gestión e implementación de credenciales"
 categories:
-  - Código seguro
+  - Codigo seguro
 tags:
   - codigo-seguro
 toc: true
@@ -15,23 +15,25 @@ toc: true
 
 # Introducción
 
-El uso adecuado de credenciales es un componente esencial en el desarrollo de software seguro. No se trata solo de elegir contraseñas largas o complejas, sino de aplicar criterios técnicos precisos durante todo su ciclo de vida: generación, almacenamiento, uso, rotación y eliminación.
+Gestionar credenciales de forma segura es una de las bases del desarrollo de software responsable. No alcanza con tener contraseñas largas o agregar símbolos al azar: se trata de entender cómo se generan, almacenan, utilizan, rotan y eliminan dentro de un sistema, y de aplicar buenas prácticas desde el inicio.
 
-En esta sección del blog, "Código Seguro", vamos a recorrer una serie de buenas prácticas para diseñar e implementar sistemas que gestionen credenciales de forma responsable y alineada con los estándares actuales. Algunos de los temas que trataremos incluyen:
+En este post de la serie "Código Seguro", te comparto un recorrido por conceptos y recomendaciones que considero clave al momento de trabajar con credenciales. No solo vas a ver buenas prácticas, sino también ejemplos de malas implementaciones que —si no se corrigen a tiempo— pueden abrir la puerta a vulnerabilidades serias como acceso no autorizado, filtración de datos o escalamiento de privilegios.
 
-  - Uso de salts aleatorios y almacenamiento de contraseñas con algoritmos de hash adecuados.
+Algunos de los puntos que abordo incluyen:
 
-  - Longitud mínima y construcción correcta de contraseñas y passphrases.
+  - Cómo usar salts aleatorios y algoritmos de hash adecuados.
 
-  - Control de cambios frecuentes, reutilización y caducidad.
+  - Cuál debería ser la longitud mínima de una contraseña y cómo construir una passphrase robusta.
 
-  - Mecanismos para gestionar credenciales temporales y tokens de un solo uso (OTP).
+  - Por qué es importante evitar la reutilización o el uso de contraseñas previamente filtradas.
 
-  - Herramientas de gestión de contraseñas y criterios para su integración.
+  - Qué herramientas existen para gestionar credenciales (como Vault o Bitwarden).
 
-  - Políticas específicas para accesos de terceros, cuentas inactivas y credenciales por defecto.
+  - Cuáles son los errores más comunes que conviene evitar.
 
-Esta guía no está orientada únicamente a cumplir requisitos normativos, sino a incorporar prácticas de diseño seguro desde el inicio del desarrollo. 
+  > ⚠️ Nota: los fragmentos de código fueron generados con ayuda de IA y se presentan solo con fines ilustrativos. No deben usarse directamente en producción sin revisión y adaptación al contexto real de tu proyecto.
+
+Este post no apunta únicamente a cumplir normativas de seguridad. La idea es ir un paso más allá y pensar en credenciales como parte del diseño seguro del software desde el arranque.
 
 # Contraseñas con salt aleatorio
 
