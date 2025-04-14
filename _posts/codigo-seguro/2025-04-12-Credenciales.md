@@ -358,7 +358,7 @@ Establecé un período de expiración razonable para las contraseñas, por ejemp
 
 # Establecer un mecanismo de regeneración de contraseñas 
 
-Toda aplicación que gestione usuarios debe contar con un mecanismo seguro y eficiente para permitir la regeneración de contraseñas, ya sea por olvido, expiración o requerimiento de seguridad (por ejemplo, ante un incidente de seguridad o sospecha de compromiso). Este mecanismo es un punto crítico del sistema y debe diseñarse con especial cuidado, ya que suele ser blanco de ataques dirigidos.
+Toda aplicación que gestione usuarios debe contar con un mecanismo seguro y eficiente para permitir la regeneración de contraseñas, ya sea por olvido, expiración o requerimiento de seguridad (por ejemplo, ante un incidente de seguridad o sospecha de compromiso).
 
 Un buen sistema de regeneración debe verificar adecuadamente la identidad del usuario, generar enlaces temporales seguros (tokens de un solo uso), establecer vencimientos breves, y evitar la exposición de datos sensibles. Además, debe garantizar que el nuevo acceso invalide inmediatamente la contraseña anterior o los tokens activos asociados.
 
@@ -409,7 +409,7 @@ Este enfoque es seguro porque:
 
 Implementá un mecanismo de restablecimiento de contraseñas basado en tokens temporales y de un solo uso, con vencimientos breves y validaciones estrictas. Evitá enviar contraseñas por correo electrónico y asegurate de registrar los intentos de regeneración para detectar abusos. Siempre que se regenere una contraseña, invalidá las sesiones activas y notificá al usuario del cambio.
 
-# Define una herramienta de gestión de contraseñas
+# Definir una herramienta de gestión de contraseñas
 
 Las `credenciales` de acceso, especialmente aquellas asociadas a usuarios con permisos elevados, deben ser administradas a través de herramientas especializadas. Usar métodos manuales o almacenar contraseñas en archivos de configuración, planillas o código fuente representa una amenaza directa a la seguridad de cualquier sistema.
 
@@ -496,6 +496,27 @@ Este enfoque es más seguro porque:
 💡 Recomendación práctica
 
 Identificá claramente las acciones de alto impacto dentro de tu aplicación (por ejemplo, cambiar correo electrónico, credenciales, deshabilitar MFA, eliminar datos sensibles) y exigí reauthenticación inmediata antes de permitirlas. Este mecanismo debe ser claro, rápido, y seguro, sin exponer contraseñas en texto plano ni generar tokens persistentes. Si tu sistema utiliza MFA, considerá forzar también una segunda validación. Recordá que la sesión activa no siempre equivale a consentimiento o control activo del usuario.
+
+# ✅ Checklist de gestión segura de credenciales
+
+- [x] Uso de funciones de hash robustas como `bcrypt`, `scrypt` o `Argon2`.
+- [x] Generación de `salt` aleatorio, único e impredecible por contraseña.
+- [x] Prohibición de algoritmos obsoletos como `MD5` o `SHA-1`.
+- [x] Contraseñas de al menos 20 caracteres o uso de passphrases.
+- [x] Validación contra listas públicas de contraseñas comprometidas.
+- [x] Prevención de la reutilización de contraseñas recientes.
+- [x] Definición de una vida útil limitada para las contraseñas.
+- [x] Regeneración segura con tokens temporales y únicos.
+- [x] Invalidación de sesiones tras cambio de contraseña.
+- [x] Reautenticación en operaciones críticas.
+- [x] Aplicación de MFA para accesos privilegiados.
+- [x] Uso de herramientas como `Vault`, `Bitwarden`, etc.
+- [x] Eliminación de secretos hardcodeados.
+- [x] Control de acceso a credenciales por rol o entorno.
+- [x] Registro de eventos críticos de autenticación.
+- [x] Auditoría y monitoreo periódico de actividad.
+
+> Este checklist resume prácticas clave. Su implementación ayuda a reducir riesgos comunes en el manejo de credenciales.
 
 # 📚 Referencias técnicas
 
