@@ -6,9 +6,9 @@ header:
 ribbon: teal
 description: "Recomendaciones y requerimientos claves para aplicar buenas prácticas de código seguro en la gestión e implementación de credenciales"
 categories:
-  - Codigo seguro
-tags:
   - codigo-seguro
+tags:
+  - credenciales
 toc: true
 ---
 
