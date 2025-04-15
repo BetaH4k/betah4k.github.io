@@ -29,7 +29,7 @@ Algunos de los puntos que abordo incluyen:
 
   > ⚠️ Nota: los fragmentos de código fueron generados con ayuda de IA y se presentan solo con fines ilustrativos. No deben usarse directamente en producción sin revisión y adaptación al contexto real de tu proyecto.
 
-Este post no apunta únicamente a cumplir normativas de seguridad. La idea es ir un paso más allá y pensar en credenciales como parte del diseño seguro del software desde el arranque.
+Este post no apunta únicamente a cumplir normativas de seguridad. La idea es ir un paso más allá y pensar en credenciales como parte del diseño seguro del software desde el comienzo.
 
 # Contraseñas con salt aleatorio
 
