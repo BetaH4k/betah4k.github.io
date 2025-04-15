@@ -175,7 +175,7 @@ Implementarlo correctamente no solo implica exigir un segundo paso, sino tambié
   - Controlar la duración de los tokens fuera de banda.
   - Asegurar que cada cuenta tenga sus propios factores de autenticación.
 
-❌ Ejemplo de implementación insegura
+❌ Ejemplo de código inseguro
 
 ```python
 # Inseguro: pregunta de seguridad como segundo factor
@@ -240,7 +240,7 @@ Este enfoque tiene varios problemas:
   - Entrega información valiosa a un atacante sin necesidad de probar contraseñas.
   - Tiene tiempos de ejecución diferentes entre cada rama del flujo.
 
-✅ Ejemplo de implementación segura
+✅ Ejemplo de código seguro
 
 ```python
 import time
@@ -273,7 +273,7 @@ En ciertos contextos, especialmente en operaciones sensibles o accesos con privi
 
 Estas medidas buscan mitigar distintos riesgos. La biometría agrega un factor que no se puede perder ni compartir tan fácilmente (aunque tiene otros desafíos), mientras que los tests de humanidad protegen contra bots, scripts automatizados o ataques por fuerza bruta que prueban miles de credenciales por minuto.
 
-❌ Ejemplo de verificación insegura
+❌ Ejemplo de código inseguro
 
 ```python
 # Inseguro: permite continuar sin verificar interacción humana
@@ -287,7 +287,7 @@ Este flujo es vulnerable porque:
   - Puede ser explotado en ataques de fuerza bruta o credential stuffing.
   - No tiene controles contextuales (dispositivo, localización, velocidad de interacción).
 
-✅ Ejemplo de implementación segura
+✅ Ejemplo de código seguro
 
 ```python
 # Seguro: requiere validación humana antes de procesar el login
@@ -314,7 +314,7 @@ Por eso, es fundamental implementar medidas que permitan detectar accesos sospec
 
 Esto no solo mejora la seguridad general del sistema, sino que también empodera al usuario: si recibe una notificación de acceso desde un país o navegador que no reconoce, puede actuar rápidamente para proteger su cuenta.
 
-❌ Ejemplo de implementación sin trazabilidad
+❌ Ejemplo de código inseguro
 
 ```python
 # Inseguro: no registra ni notifica nada
@@ -329,7 +329,7 @@ Este enfoque es débil porque:
   - No notifica al usuario sobre actividad en su cuenta.
   - Hace que detectar accesos no autorizados sea casi imposible.
 
-✅ Ejemplo de implementación segura
+✅ Ejemplo de código seguro
 
 ```python
 # Seguro: registra y notifica al usuario tras un acceso exitoso
@@ -358,7 +358,7 @@ Una autenticación no debería durar para siempre. Tanto las sesiones activas co
 
 Por otro lado, también hay que prever qué pasa si el usuario pierde acceso a su cuenta, ya sea porque olvidó la contraseña, cambió de dispositivo o fue víctima de un ataque. El sistema debe ofrecer un mecanismo de recuperación robusto, seguro y con controles adicionales, sin dejar puertas abiertas al abuso o a la suplantación de identidad.
 
-❌ Ejemplo de sesión sin expiración y recuperación insegura
+❌ Ejemplo de código inseguro
 
 ```python
 # Inseguro: la sesión no expira y el enlace de recuperación es débil
@@ -374,7 +374,7 @@ Este diseño presenta varios riesgos:
   - Cualquier persona que intercepte el link de recuperación puede acceder a la cuenta.
   - No hay validación temporal ni verificación adicional.
 
-✅ Ejemplo de control de sesión y recuperación segura
+✅ Ejemplo de código seguro
 
 ```python
 from datetime import datetime, timedelta
@@ -408,7 +408,7 @@ No sirve de nada tener una autenticación robusta por contraseña y MFA si tambi
 
 Además, es importante que ningún método alternativo funcione como un "atajo" inseguro que los atacantes puedan explotar. Si una opción es más débil, será la primera que se intente vulnerar.
 
-❌ Ejemplo de implementación desigual
+❌ Ejemplo de código inseguro
 
 ```python
 # Inseguro: acceso completo con solo un token por correo
@@ -424,7 +424,7 @@ Este enfoque es inseguro porque:
   - No exige un segundo factor ni verificación adicional.
   - Otorga acceso completo sin requerir autenticación robusta.
 
-✅ Ejemplo de diseño equitativo
+✅ Ejemplo de código seguro
 
 ```python
 # Seguro: requiere doble validación incluso en flujos alternativos
