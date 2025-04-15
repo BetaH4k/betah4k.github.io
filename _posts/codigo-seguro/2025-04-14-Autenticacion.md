@@ -263,7 +263,7 @@ Este enfoque es más seguro porque:
 
 Diseñar las respuestas del sistema de manera que no revelen información sensible. Usar siempre mensajes genéricos para errores de autenticación, aplicar tiempos de espera constantes y evitar bloquear cuentas automáticamente tras múltiples fallos. Si se decide bloquear temporalmente, que sea mediante mecanismos como delays progresivos o reCAPTCHA, y no con bloqueos definitivos. El objetivo es proteger sin castigar al usuario legítimo por errores genuinos.
 
-# Verificación adicional: biometría y prueba de humanidad
+# Biometría y prueba de humanidad
 
 En ciertos contextos, especialmente en operaciones sensibles o accesos con privilegios elevados, una contraseña o token no es suficiente. Para reforzar la seguridad y reducir el riesgo de automatización maliciosa, muchas aplicaciones suman una capa extra de verificación que puede tomar dos formas:
 
@@ -305,7 +305,7 @@ Este enfoque es más robusto porque:
 
 Agregar mecanismos de verificación adicional en puntos clave del sistema. Para accesos críticos o repetidos, considerar incorporar factores biométricos o verificaciones de actividad humana (CAPTCHA, patrones de interacción, análisis de comportamiento). Estas medidas no deben reemplazar la autenticación tradicional, sino complementarla.
 
-# Supervisar el acceso: notificaciones y verificación del dispositivo
+# Notificaciones y verificación del dispositivo
 
 La seguridad no termina cuando una persona se loguea. De hecho, muchas de las acciones más importantes en un sistema seguro ocurren después de la autenticación: registrar quién accedió, desde qué dispositivo, y notificar al usuario si algo fuera de lo normal sucede.
 
@@ -351,7 +351,7 @@ Este enfoque fortalece la seguridad porque:
 
 Implementar mecanismos de registro de accesos con detalles como dirección IP, ubicación estimada, navegador y sistema operativo. Además, enviar una notificación automática al usuario cada vez que se accede a su cuenta desde un nuevo dispositivo o ubicación. Para reforzar esta medida, considerar incluir controles como listas de dispositivos autorizados, verificación de identidad del equipo mediante certificados o tokens, y la posibilidad de revocar sesiones activas desde el panel de usuario.
 
-# Control del ciclo de autenticación: expiración y recuperación
+# Expiración y recuperación
 
 Una autenticación no debería durar para siempre. Tanto las sesiones activas como los tokens de acceso tienen que tener una vida útil limitada, especialmente en sistemas sensibles o expuestos a internet. Permitir que una sesión siga válida indefinidamente, aunque el usuario cierre el navegador o deje de interactuar, es una invitación a accesos indebidos.
 
