@@ -9,7 +9,7 @@ categories:
   - Codigo Seguro
 tags:
   - autenticacion
-  - Codigo seguro
+  - codigo seguro
 toc: true
 ---
 
