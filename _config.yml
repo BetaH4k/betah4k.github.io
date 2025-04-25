@@ -93,7 +93,7 @@ analytics:
 # Site Author
 author:
   name: "Lautaro Casanova"
-  avatar: /assets/images/site_data/avatar2.png # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar: /assets/images/site_data/avatar.png # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio: "AppSec, SSDLC y Offensive Security – desde el análisis de código hasta el pentest en producción."
   # location: "Area 51"
   email:
