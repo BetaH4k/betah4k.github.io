@@ -26,7 +26,7 @@ Este artículo parte de la serie “Código Seguro” ofrece una guía práctica
 
 ---
 
-# 🧭 1. Planificación y Análisis de Requisitos
+# Planificación y Análisis de Requisitos
 
 ## Objetivo
 
@@ -60,7 +60,7 @@ Identificar desde el inicio los **activos críticos**, **riesgos asociados** y *
 
 ---
 
-# 🧱 2. Diseño Seguro del Sistema
+# Diseño Seguro del Sistema
 
 ## Objetivo
 
@@ -89,7 +89,7 @@ Supongamos que diseñás un sistema de pagos: el modelado de amenazas debería i
 
 ---
 
-# 💻 3. Desarrollo Seguro
+# Desarrollo Seguro
 
 ## Objetivo
 
@@ -126,7 +126,7 @@ cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
 
 ---
 
-# 🧪 4. Pruebas de Seguridad (Testing)
+# Pruebas de Seguridad (Testing)
 
 ## Objetivo
 
@@ -164,7 +164,7 @@ return "Si las credenciales son válidas, accederá al sistema"
 
 ---
 
-# 🚀 5. Integración y Despliegue Continuos (CI/CD Seguros)
+# Integración y Despliegue Continuos (CI/CD Seguros)
 
 ## Objetivo
 
@@ -195,7 +195,7 @@ jobs:
 
 ---
 
-# 🛡️ 6. Mantenimiento, Monitoreo y Respuesta a Incidentes
+# Mantenimiento, Monitoreo y Respuesta a Incidentes
 
 ## Objetivo
 
