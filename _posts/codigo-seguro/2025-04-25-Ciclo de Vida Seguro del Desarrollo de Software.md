@@ -49,10 +49,10 @@ Identificar desde el inicio los **activos críticos**, **riesgos asociados** y *
 ## Ejemplo práctico
 
 ```markdown
-✅ Historia de usuario segura:
+Historia de usuario segura:
 "Como usuario, quiero que la plataforma almacene mi contraseña de forma segura para que nadie pueda acceder a ella incluso si se compromete la base de datos."
 
-🎯 Criterios de aceptación:
+Criterios de aceptación:
 - Hash con `bcrypt` + salt aleatorio.
 - Validación de complejidad mínima.
 - Proceso de recuperación por MFA y correo verificado.
