@@ -3,7 +3,7 @@ title: "Autenticación"
 classes: wide
 header:
   teaser: /assets/images/site_data/c-autenticacion.png
-ribbon: teal
+ribbon: blue
 description: "Recomendaciones y requerimientos claves para aplicar buenas prácticas de código seguro en la gestión e implementación de autenticación en una aplicación."
 categories:
   - Codigo Seguro
